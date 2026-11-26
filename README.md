@@ -38,7 +38,6 @@ cmake --build --preset release
 - [LearnCpp.com](https://www.learncpp.com/) - Free comprehensive C++ tutorial
 - [CppCon YouTube](https://www.youtube.com/@CppCon) - Conference talks on modern C++
 - [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines) - Best practices by Bjarne Stroustrup
-- [C++ Book Series](https://simplifycpp.org/?id=cp) - A collection of specialized books covering all areas of modern C++
 - [Learn Modern C++23](https://www.youtube.com/playlist?list=PLTjUlazALHSBQp4jdqHTCduTSSMU-cz5P) - Erarnitox course on C++23
 - [Jason Turner](https://www.youtube.com/@cppweekly) - Great C++ channel
 - [MetalSilicon](https://www.youtube.com/@MetalSiliconYT) - Great channel on helping everyone understand low level Software Engineering
@@ -66,5 +65,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [CMake Documentation](https://cmake.org/documentation/)
 - [Learn C++](https://www.learncpp.com/)
 - [Erarnitox](https://github.com/Erarnitox)
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
