@@ -4,8 +4,6 @@
 debug/
 release/
 build/
-out/
-src/
 
 # CMake generated files
 CMakeCache.txt
