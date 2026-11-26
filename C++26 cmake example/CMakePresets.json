@@ -1,44 +1,48 @@
 {
-    "version" : 8,
+    "version": 8,
     "cmakeMinimumRequired": {
-        "major" : 4,
-        "minor" : 3,
-        "patch" : 0
+        "major": 4,
+        "minor": 5,
+        "patch": 0
     },
-    "configurePresets" : [
+    "configurePresets": [
         {
-            "name" : "debug",
-            "displayName" : "debug",
-            "description" : "Debug Build using Clang++ and Ninja",
-            "generator" : "Ninja",
-            "binaryDir" : "${sourceDir}/debug",
-            "cacheVariables" : {
-                "CMAKE_CXX_COMPILER" : "clang++",
-                "CMAKE_BUILD_TYPE" : "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS" : true
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
             }
         },
         {
-            "name" : "release",
-            "displayName" : "release",
-            "description" : "Release Build using Clang++ and Ninja",
-            "generator" : "Ninja",
-            "binaryDir" : "${sourceDir}/release",
-            "cacheVariables" : {
-                "CMAKE_CXX_COMPILER" : "clang++",
-                "CMAKE_BUILD_TYPE" : "Release",
-                "CMAKE_EXPORT_COMPILE_COMMANDS" : true
+            "name": "debug",
+            "inherits": "base",
+            "displayName": "Debug",
+            "description": "Debug build using Clang++ and Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE" : "Debug"
+            }
+        },
+        {
+            "name": "release",
+            "inherits": "base",
+            "displayName": "Release",
+            "description": "Release build using Clang++ and Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE" : "Release"
             }
         }
     ],
-    "buildPresets" : [
+    "buildPresets": [
         {
-            "name" : "debug",
-            "configurePreset" : "debug"
+            "name": "debug",
+            "configurePreset": "debug"
         },
         {
-            "name" : "release",
-            "configurePreset" : "release"
+            "name": "release",
+            "configurePreset": "release"
         }
-   ]
+    ]
 }

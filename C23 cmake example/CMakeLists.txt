@@ -1,23 +1,43 @@
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 4.5)
 
-# Project Name and Lanuage
-project(hello_world C)
+project(hello_world_c LANGUAGES C)
 
-# Set C Standard
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
-
-# Generate compile_commands.json for ClangD
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Enable warnings and debugging symbols
-add_compile_options(-Wall -Wcast-align -Wconversion -Wdouble-promotion -Werror -Wextra -Wformat=2 -Wnull-dereference -Wpedantic -Wshadow -g -O0)
+# Only needed if this targeting MSVC or clang-cl on Windows.
+if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
-# Include headers from include/
-include_directories(include)
-
-# Compile executable
-add_executable(hello_world
+add_executable(hello_world_c
     src/main.c
+)
+
+target_include_directories(hello_world_c PRIVATE include)
+
+# GCC style warnings: supported by GCC and Clang not MSVC
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+    target_compile_options(hello_world_c PRIVATE
+        -Wall
+        #-Werror
+        -Wextra
+        -Wpedantic
+        -Wshadow
+        -Wcast-align
+        -Wconversion
+        -Wdouble-promotion
+        -Wformat=2
+        -Wnull-dereference
+    )
+endif()
+
+set_target_properties(hello_world_c PROPERTIES
+    OUTPUT_NAME "Hello-world-c"
+)
+
+install(TARGETS hello_world_c
+    RUNTIME DESTINATION bin
 )

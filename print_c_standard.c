@@ -1,57 +1,71 @@
-// This program prints the C language standard your compiler is currently
-// This program is an edited version of the learncpp.com version but for C
-// Standards
+// This prints the C language standard your compiler is currently using
+// Freely redistributable, courtesy of learncpp.com
 // (https://www.learncpp.com/cpp-tutorial/what-language-standard-is-my-compiler-using/)
 
 #include <stdio.h>
 
-static const int   numCStandards = 5;
-static const long  cStdCode[5]   = {199409L, 199901L, 201112L, 201710L, 202311L};
-static const char* cStdName[5]   = {"C95", "C99", "C11", "C17", "C23"};
+typedef struct StandardInfo {
+	long code;
+	const char *name;
+} StandardInfo_t;
 
-static long getCStandard(void) {
-#if defined(__STDC_VERSION__)
+// C Standard in acsending order
+static const StandardInfo_t kStandard[] = {
+    {199409L, "C95"},
+    {199901L, "C99"},
+    {201112L, "C11"},
+    {201710L, "C17"},
+    {202311L, "C23"},
+};
+
+// Reports when the compiler defines __STDC__ but not __STDC_VERSION__ (90)
+#define C90_CODE 0L
+
+// Reports when the complier cannot identify itself as C
+#define UNKNOWN_CODE (-1L)
+
+static long GetCStandard() {
+#if defined (__STDC_VERSION__)
 	return __STDC_VERSION__;
-#elif defined(__STDC__)
-	return 198900L; // C89/C90
+#elif defined (__STDC__)
+	return C90_CODE;
 #else
-	return -1;
+	return UNKNOWN_CODE;
 #endif
 }
 
-int main(void) {
-	const long standard = getCStandard();
-	int        found    = 0;
+int main() {
+	const long standard = GetCStandard();
 
-	if (standard == -1) {
-		printf("Error: Unable to determine your C language standard.\n");
+	if (standard == UNKNOWN_CODE) {
+		printf("Error: Unable to determine your C lanuage standard. Sorry\n");
 		return 0;
 	}
 
-	for (int i = 0; i < numCStandards; i++) {
-		if (standard == cStdCode[i]) {
-			printf("Your compiler is using %s (standard code %ldL)\n", cStdName[i], standard);
-			found = 1;
-			break;
+	// C90 has no __STDC_VERSION__, so it is handled before the table lookup
+	if (standard == C90_CODE) {
+		printf("Your compiler is using C90 (standard code %ldL)\n", standard);
+		return 0;
+	}
+
+	const StandardInfo_t *const end  =kStandard + (sizeof kStandard / sizeof kStandard[0]);
+
+	for (const StandardInfo_t *Cstandard = kStandard; Cstandard != end; ++Cstandard) {
+		// Exact match: the compiler is running a finalized standard
+		if (standard == Cstandard->code) {
+			printf("Your complier is using %s (standard code %ldL)\n", Cstandard->name, standard);
+			return 0;
 		}
 
-		if (standard < cStdCode[i]) {
-			printf("Your compiler is using a preview/pre-release of %s "
-			       "(standard code %ldL)\n",
-			       cStdName[i], standard);
-			found = 1;
-			break;
+		// Between two finalized codes: preview or pre-release of the next standard
+		if (standard < Cstandard->code) {
+			printf("Your complier is using a preview/pre-release of %s (standard code %ldL)\n",
+				Cstandard->name, standard);
+			return 0;
 		}
 	}
 
-	if (!found) {
-		if (standard == 198900L) {
-			printf("Your compiler is using C89/C90 (standard code %ldL)\n", standard);
-		} else {
-			printf("Your compiler is using an unknown/future C standard (code "
-			       "%ldL)\n",
-			       standard);
-		}
-	}
+	// If a newer version is used that is not in the table
+	printf("Your complier is using an unknown/future C standard (standard code %ldL)\n", standard);
 	return 0;
 }
